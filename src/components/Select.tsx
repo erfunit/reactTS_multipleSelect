@@ -1,10 +1,13 @@
+// import the useState hook from react.
 import { useState } from "react";
 
+// define the SelectOption type with label and value properties.
 export type SelectOption = {
   label: string;
   value: any;
 };
 
+// define the MultipleSelectProps type which includes multiple options, values, and an onChange method.
 type MultipleSelectProps = {
   multiple: true;
   options: SelectOption[];
@@ -12,6 +15,7 @@ type MultipleSelectProps = {
   onChange: (value: SelectOption[]) => void;
 };
 
+// define the SingleSelectProps type which includes a single or undefined option, value, and an onChange method.
 type SigleSelectProps = {
   multiple?: false;
   options: SelectOption[] | undefined;
@@ -19,14 +23,18 @@ type SigleSelectProps = {
   onChange: (value: SelectOption | undefined) => void;
 };
 
+// define the SelectProps type which is a combination of MultipleSelectProps and SingleSelectProps.
 type SelectProps = {
   options: SelectOption[];
 } & (MultipleSelectProps | SigleSelectProps);
 
+// define the Select functional component.
 export function Select({ multiple, value, onChange, options }: SelectProps) {
+  // create state variables for show and highlightedIndex.
   const [show, setShow] = useState<boolean>(false);
   const [hightlightedIndex, setHightlightedIndex] = useState<number>(0);
 
+  // clearOptions is a function that clears all options if the select is multiple, or sets the option as undefined if single.
   const clearOptions = () => {
     if (multiple) {
       onChange([]);
@@ -35,6 +43,8 @@ export function Select({ multiple, value, onChange, options }: SelectProps) {
     }
   };
 
+  // selectOption is a function that either adds an option to the array or removes it if already present for multiple select,
+  // or sets the value as the selected option for single select.
   const selectOption = (option: SelectOption): void => {
     if (multiple) {
       if (value.includes(option)) {
@@ -47,14 +57,18 @@ export function Select({ multiple, value, onChange, options }: SelectProps) {
     }
   };
 
+  // isOptionSelected is a function that checks if an option is selected in multiple or single select mode.
   const isOptionSelected = (option: SelectOption): boolean => {
     return multiple ? value.includes(option) : option === value;
   };
 
+  // changeHighlightedIndex is a function that sets the highlighted index to the specified value.
   const changeHighlightedIndex = (index: number): void => {
     setHightlightedIndex(index);
   };
 
+  // Render the Select component, which includes functionality for opening/closing the options,
+  // clearing selected options, selecting/deselecting options, and handling focus and blur events.
   return (
     <div
       onClick={() => setShow((prev) => !prev)}
